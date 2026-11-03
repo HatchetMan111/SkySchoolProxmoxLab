@@ -98,6 +98,62 @@ pct enter <CTID>                      # Shell im Container
 pct exec <CTID> -- skylab-update      # SkyLab aktualisieren
 ```
 
+### Setup-Wizard: Proxmox VE verbinden
+
+Im Schritt **"Connect the first Proxmox VE"** trägst du den Zugang zu deinem
+Proxmox-Server ein. Die SkyLab-Instanz spricht PVE über die API an – sie muss
+den Host also selbst erreichen können.
+
+| Feld | Was eingeben |
+| --- | --- |
+| **Host** * | IP-Adresse oder DNS-Name des PVE-Knotens bzw. Cluster-Einstiegspunkts, z. B. `192.168.1.10` oder `pve.school.edu`. **Ohne** `https://` und **ohne** `:8006` – der Port hat ein eigenes Feld. |
+| **Port** | `8006` (PVE-API), nur ändern wenn dein PVE anders lauscht |
+| **API user** * | `root@pam` oder ein eigener PVE-Benutzer, z. B. `skylab@pve` |
+| **Password** * | Passwort dieses PVE-Benutzers (API-Token werden hier nicht unterstützt) |
+| **API timeout** | `30` Sekunden passt meist |
+| **Verify the TLS certificate** | aus lassen, wenn PVE ein Self-Signed-Zertifikat nutzt; bei privater CA ankreuzen und das CA-Zertifikat als PEM einfügen |
+
+Danach **Test connection** klicken. Erst wenn der Test grün ist, kannst du die
+erkannten Nodes/Storages als Defaults übernehmen:
+
+- **Resource pool name:** `SkyLab` (Pool vorher in PVE anlegen oder Default lassen)
+- **Default node:** automatisch oder einen Knoten wählen
+- **ISO storage:** z. B. `local`
+- **Disk storage:** z. B. `local-lvm`
+
+Wichtig:
+
+- Der Host muss **aus dem SkyLab-Container** erreichbar sein, nicht nur von
+  deinem Laptop. Kurz prüfen:
+  `pct exec <CTID> -- curl -k https://<host>:8006`
+- Bei einem **Cluster** reicht ein beliebiger Knoten als Host; der Test erkennt
+  den Cluster und listet alle Nodes.
+- Der PVE-Benutzer braucht Rechte zum Klonen/Erstellen/Starten/Stoppen/Löschen
+  von VMs und LXC sowie zum Lesen von Nodes und Storages. `root@pam` funktioniert;
+  sauberer ist ein eigener Benutzer mit z. B. der Rolle `PVEAdmin` auf `/`.
+- Nutzt `root@pam` Zwei-Faktor-Authentifizierung, besser einen eigenen
+  PVE-Benutzer ohne TFA anlegen.
+- Die Zugangsdaten werden verschlüsselt in der SkyLab-Datenbank gespeichert.
+  Deshalb `SECRET_KEY` in `/opt/skylab/.env` später nicht einfach ändern.
+
+### Setup-Wizard: IP-Subnetz
+
+Im nächsten Schritt legst du fest, aus welchem Netz die VMs/LXC ihre festen
+IPs bekommen:
+
+| Feld | Beispiel |
+| --- | --- |
+| **Subnet CIDR** | `10.10.0.0/24` |
+| **Gateway IP** | `10.10.0.1` |
+| **PVE bridge name** | `vmbr1` (die Bridge, an der die Maschinen hängen) |
+| **VLAN ID** | optional, z. B. `100` |
+| **Gateway VM IP** | `10.10.0.2` (nur nötig, wenn du die Gateway-VM nutzt) |
+| **Main system IP** | optional, z. B. `10.10.0.3` |
+| **DNS servers** | optional, z. B. `8.8.8.8,1.1.1.1` |
+
+Gateway- und Gateway-VM-IP müssen im Subnetz liegen und sich unterscheiden.
+Das Subnetz muss auf der gewählten PVE-Bridge geroutet sein.
+
 ## Was das Script macht
 
 1. Prüft PVE-Version, Storage und Template-Verfügbarkeit.
