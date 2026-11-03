@@ -12,6 +12,43 @@ Campus-Cloud für VMs, Klassen und Proxmox-Verwaltung.
 - Generierte Secrets und Zugangsdaten unter `/root/skylab-<CTID>.creds`
 - Update-Helfer `skylab-update` im Container
 
+## Was ist SkyLab?
+
+SkyLab ist eine selbstgehostete Verwaltungsplattform für Proxmox VE, gedacht für
+Schulen, Hochschulen und Labore. Statt alle direkt in die PVE-Oberfläche zu
+lassen, bekommen Schüler und Lehrkräfte ein Web-Portal, über das sie Maschinen
+anfordern, starten und im Browser bedienen – die Administration bleibt zentral.
+
+**Schülerinnen und Schüler**
+- VMs/Container beantragen, starten, stoppen, neu starten
+- Desktop per VNC oder Terminal direkt im Browser, ohne zusätzliche Software
+- Snapshots sowie Backup und Restore der eigenen Maschine
+
+**Lehrkräfte**
+- Klassen und Kurse anlegen, Schüler zuordnen, Zeitpläne planen
+- Eine ganze Klasse in einem Schritt aus Vorlagen ausrollen, auch
+  Mehrmaschinen-Unterrichtsumgebungen
+- Unterrichtsmonitor, Nachrichten an die Klasse, KI-unterstütztes Bewerten
+
+**Administration**
+- Mehrere Proxmox-Knoten oder Cluster, HA-Failover, Templates, Storages
+- Genehmigungs-Workflow für VM-Anfragen inkl. Kapazitätsprüfung und geplanter
+  Bereitstellung
+- Quotas, TTL-Recycling, Idle-Erkennung, Ressourcen-Alarme, Mining-Erkennung
+- Firewall, NAT, Domain-Reverse-Proxy, IP-Verwaltung und eine per SSH
+  verwaltete Gateway-VM
+- Anmeldung per Passwort, Google, LDAP/AD, optional TOTP und Turnstile; Rollen
+  Schüler/Lehrkraft/Admin; vollständiges Audit-Log
+- Health-Monitoring, System-Alarme, Web-Push und Prometheus-Metriken
+
+**Optional, nicht Teil dieses Installers**
+- **Gateway-VM** (separate Debian-VM): Portweiterleitung, Domains mit HTTPS,
+  WireGuard-VPN – Einrichtung später über die Seite „Gateway VM" im Web-UI
+- **KI-Stack**: vLLM + LiteLLM mit OpenAI-kompatibler API und KI-Assistenten
+- **Monitoring-Stack**: Prometheus, Grafana, Loki, Alloy, InfluxDB
+
+Lizenz: SkyLab steht unter AGPL-3.0, dieses Install-Script unter MIT.
+
 ## Voraussetzungen
 
 - Proxmox VE **8 oder neuer**
