@@ -189,7 +189,7 @@ pct exec <CTID> -- docker compose -f /opt/skylab/docker-compose.yml logs --tail=
 
 | Meldung | Bedeutung / Lösung |
 | --- | --- |
-| `Setup: Proxmox connection test failed for …: Failed to resolve 'https'` (oder `'http'`) | Im **Host**-Feld steht ein Schema. Nur IP oder DNS-Name eintragen (`192.168.1.10`), Port separat. |
+| `Setup: Proxmox connection test failed for …: Failed to resolve 'https'` (oder `'http'`) | Im **Host**-Feld steht ein Schema. Nur IP oder DNS-Name eintragen, Port separat. Beispiel, das so funktioniert: **Host** `192.168.178.130`, **Port** `8006` – nicht `https://192.168.178.130` und nicht `192.168.178.130:8006`. |
 | `Proxmox 尚未設定，請至管理員介面完成 Proxmox 連線設定。` | „Proxmox noch nicht konfiguriert“ – chinesischer Originaltext aus SkyLab, erscheint bis der Wizard abgeschlossen ist. Die begleitenden Monitoring-/Alert-Fehler sind bis dahin normal. |
 | `WARN … The "PROXMOX_*" variable is not set` | Kosmetisch: ungenutzte Alt-Variablen aus der Compose-Datei, keine Auswirkung. |
 
